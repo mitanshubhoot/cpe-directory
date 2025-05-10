@@ -2,6 +2,12 @@
 
 A full-stack web app for browsing Common Platform Enumeration (CPE) entries using a fast RESTful API and a modern React frontend.
 
+Demo : 
+```bash
+https://drive.google.com/file/d/1trJq7Ge7NTVgwrcZIIEQcE9NFJV012bm/view?usp=sharing
+```
+
+
 ---
 
 ## 📌 Features
