@@ -32,22 +32,21 @@ cpe-directory/
 
 ---
 
-## 🧩 Download the db file
+# Running the App -
+## Step 1)  🧩 Download the db file
 
 This project uses a pre-built SQLite database (`cpe.db`) which is **not included in the repo** because of its size (~360MB).
 
-Use this link to download it:
+#### ▶️ Use this link to download it:
 
 ```bash
 https://github.com/mitanshubhoot/cpe-directory/releases/download/v1.0.0/cpe.db
 ```
 and place it in `backend/`
 
-## 🧩 (Or Optionally) Regenerate the Database
+#### ▶️ Or Optionally, if you'd like to regenerate it yourself:
 
-If you'd like to regenerate it yourself:
-
-### 🔽 Step 1: Download the XML file
+1: Download the XML file
 
 Get the official CPE dictionary (~650MB) from:
 
@@ -63,7 +62,7 @@ Place the file inside the `backend/` folder.
 
 ---
 
-### 🛠 Step 2: Parse and create the database
+2: Parse and create the database
 
 From inside `backend/`:
 
@@ -75,7 +74,7 @@ This reads the XML and generates `cpe.db`, which can then be used by the API.
 
 ---
 
-## 🐳 Docker Usage for Running the app
+## Step 2) 🐳 Docker Usage
 
 This app is fully Dockerized and includes the database (`cpe.db`) and frontend assets inside the image.
 
