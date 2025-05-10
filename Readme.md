@@ -8,9 +8,8 @@ A full-stack web app for browsing Common Platform Enumeration (CPE) entries usin
 
 - Parses and stores data from the official CPE XML dictionary
 - REST API built with Flask + SQLite
-- Responsive React frontend (with pagination, filtering, search, tooltips)
-- Lazy-loaded `cpe.db` from GitHub Releases to support publishing
-- Supports deployment on [Render](https://render.com)
+- Responsive React frontend (pagination, filtering, tooltips, date filters)
+- Fully Dockerized for easy deployment
 
 ---
 
@@ -22,70 +21,89 @@ cpe-directory/
 │   ├── api.py             # Main API server
 │   ├── db.py              # DB connection helpers
 │   ├── parser.py          # Parses official XML and populates DB
-│   ├── cpe.db             # (Ignored) DB auto-downloaded from GitHub Release
-│   ├── frontend_build     # Static UI (Built from frontend/)
-│   └── render.yaml        # Render deploy config
-├── frontend/              # React app (optional in dev mode)
-│   └── build/             # Copied into backend/frontend_build for deployment
+│   ├── cpe.db             # (Ignored) Preprocessed SQLite DB (not tracked)
+│   └── frontend_build     # Static React build copied here for deployment
+├── frontend/              # React app source (optional in dev mode)
+│   └── build/             # Compiled static files
+├── Dockerfile             # Docker config
+├── .dockerignore          # Docker context cleanup
 └── README.md
 ```
 
 ---
 
-## 🛠️ Setup Instructions
+## 🧩 Download the db file
 
-### 1. Clone the Repo
+This project uses a pre-built SQLite database (`cpe.db`) which is **not included in the repo** because of its size (~360MB).
 
-```bash
-git clone https://github.com/mitanshubhoot/cpe-directory.git
-cd cpe-directory/backend
-```
-
-### 2. Create Virtual Environment
+Use this link to download it:
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+https://github.com/mitanshubhoot/cpe-directory/releases/download/v1.0.0/cpe.db
+```
+and place it in `backend/`
+
+## 🧩 (Or Optionally) Regenerate the Database
+
+If you'd like to regenerate it yourself:
+
+### 🔽 Step 1: Download the XML file
+
+Get the official CPE dictionary (~650MB) from:
+
+[🔗 NVD CPE Dictionary](https://nvd.nist.gov/products/cpe)
+
+Or directly:
+
+```bash
+wget https://nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml
 ```
 
+Place the file inside the `backend/` folder.
+
+---
+
+### 🛠 Step 2: Parse and create the database
+
+From inside `backend/`:
+
+```bash
+python parser.py
+```
+
+This reads the XML and generates `cpe.db`, which can then be used by the API.
+
+---
+
+## 🐳 Docker Usage for Running the app
+
+This app is fully Dockerized and includes the database (`cpe.db`) and frontend assets inside the image.
+
+### 🔧 Build the Docker image
+
+```bash
+docker build -t cpe-directory .
+```
+
+### ▶️ Run the container locally
+
+```bash
+docker run -p 5050:5000 cpe-directory
+```
+
+Then visit: [http://localhost:5050](http://localhost:5050)
 ---
 
 ## 🧠 How It Works
 
-- On app startup, `api.py` checks if `cpe.db` exists.
-- If not, it **downloads it from a GitHub Release**:
-  ```
-  https://github.com/mitanshubhoot/cpe-directory/releases/download/v1.0.0/cpe.db
-  ```
-
-You do **not** need to store `cpe.db` or `official-cpe-dictionary_v2.3.xml` in GitHub.
-
----
-
-## 🧪 Local Development
-
-### Backend
-
-```bash
-cd backend
-flask run  # or python api.py
-```
-
-### Frontend (optional if running separately)
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-To serve frontend from Flask, build and copy it:
-
-```bash
-npm run build
-cp -r build ../backend/frontend_build
-```
+- Flask serves a RESTful API and hosts the static React frontend.
+- The SQLite database is queried using pagination and filters.
+- The React UI shows CPE entries with support for:
+  - Truncated columns
+  - Link tooltips and popovers
+  - Per-column filtering
+  - Deprecation date filters
+  - Pagination and sorting
 
 ---
 
@@ -100,12 +118,10 @@ cp -r build ../backend/frontend_build
 
 ## 📂 Ignored Files
 
-These are ignored via `.gitignore` (not stored in repo):
+These are ignored via `.gitignore` and not pushed to GitHub:
 
-- `cpe.db` – large SQLite DB
-- `official-cpe-dictionary_v2.3.xml` – 600MB XML source
-
-Uploaded to GitHub Releases for reprocessing.
+- `backend/cpe.db` – SQLite DB (~360MB)
+- `backend/official-cpe-dictionary_v2.3.xml` – Source XML (~650MB)
 
 ---
 
