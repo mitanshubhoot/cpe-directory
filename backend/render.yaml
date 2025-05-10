@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cpe-directory
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn api:app
+    plan: free
