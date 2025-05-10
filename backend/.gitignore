@@ -1,0 +1,3 @@
+# Ignore database and XML dump
+cpe.db
+official-cpe-dictionary_v2.3.xml
