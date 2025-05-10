@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db-journal
+*.log
+.env
+venv/
+frontend/node_modules/
+*.DS_Store
+backend/official-cpe-dictionary_v2.3.xml

@@ -2,18 +2,7 @@ from flask import Flask, request, jsonify, g, send_from_directory
 import sqlite3
 import json
 import os
-import requests
 from db import get_db, close_db
-
-DB_PATH = "cpe.db"
-DB_URL = "https://github.com/mitanshubhoot/cpe-directory/releases/download/v1.0.0/cpe.db"
-
-if not os.path.exists(DB_PATH):
-    print("Downloading cpe.db from GitHub Releases...")
-    with open(DB_PATH, "wb") as f:
-        f.write(requests.get(DB_URL).content)
-    print("Download complete.")
-
 
 app = Flask(__name__, static_folder="frontend_build", static_url_path="")
 
